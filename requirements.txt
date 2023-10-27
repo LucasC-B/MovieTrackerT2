@@ -1,1 +1,5 @@
 django
+djangorestframework
+pillow
+setuptools
+django-cors-headers
