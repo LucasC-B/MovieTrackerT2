@@ -3,7 +3,7 @@ from django.conf import settings
 
 # Create your models here.
 class Filme(models.Model):
-    titulo = models.CharField(help_text='Digite o titulo do filme', 
+    titulo = models.CharField(primary_key=True, help_text='Digite o titulo do filme', 
                               max_length=50, null=False, blank=False)
     nacionalidade = models.CharField(help_text='Digite a nacionalidade do filme', 
                               max_length=50, null=False, blank=False)
