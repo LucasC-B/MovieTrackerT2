@@ -43,6 +43,9 @@ INSTALLED_APPS = [
     'corsheaders',      # CORS
     'drf_yasg',         # swagger
     'coreapi',          # swagger
+    'rest_framework.authtoken',
+    'django_rest_passwordreset', 
+    
 ]
 
 MIDDLEWARE = [
@@ -131,4 +134,8 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 REST_FRAMEWORK = {
     'DEFAULT_SCHEMA_CLASS':
     'rest_framework.schemas.corepai.AutoSchema',
+    'DEFAULT_AUTHENTICATION_CLASS': [
+        'rest_framework.authentication.TokenAuthentication',
+    ], 
+    
 }
