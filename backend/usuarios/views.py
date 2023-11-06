@@ -13,8 +13,8 @@ from drf_yasg import openapi
 
 class CustomAuthToken(ObtainAuthToken):
     @swagger_auto_schema(
-        operation_summary = 'obtem o token de autenticacao'
-        operation_description = 'retorna o token em caso de sucesso ou 401'
+        operation_summary = 'obtem o token de autenticacao',
+        operation_description = 'retorna o token em caso de sucesso ou 401',
         request_body = openapi.Schema(
             type = openapi.TYPE_OBJECT,
             properties = {
@@ -44,7 +44,7 @@ class CustomAuthToken(ObtainAuthToken):
     
     @swagger_auto_schema(
         operation_summary = 'Obtem username do usuario',
-        operation_description = "Retorna o username ou visitante caso nao esteja logado"
+        operation_description = "Retorna o username ou visitante caso nao esteja logado",
         security = [{'Token':[]}],
         manual_parameters = [
             openapi.Parameter(
@@ -54,7 +54,7 @@ class CustomAuthToken(ObtainAuthToken):
                 description = 'Token de autenticacao no formato "token \<<i>valor do token<\i>\>"',
                 default = 'token',
             )
-        ]
+        ],
         responses={
             200: openapi.Response(
                 description = 'Nome do usuario',
@@ -63,7 +63,7 @@ class CustomAuthToken(ObtainAuthToken):
                     properties={'username' : openapi.Schema(type=openapi.TYPE_STRING)},
                 ),
             )
-        }
+        },
     )
 
     def get(self, request):
