@@ -1,86 +1,151 @@
-from django.shortcuts import render
-from rest_framework.response import Response
 from rest_framework import status
-# Autenticação
-from rest_framework.authtoken.views import ObtainAuthToken
-from rest_framework.authtoken.models import Token
+from rest_framework.response import Response
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import IsAuthenticated
+from usuarios.models import Usuario
+from rest_framework.views import APIView
 from django.contrib.auth import authenticate
-from django.contrib.auth import login
-# Swagger
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
-# Create your views here.
 
-class CustomAuthToken(ObtainAuthToken):
+from  .serializers import RegistrationSerializer, AccountPropertiesSerializer, AccountDeleteSerializer
+from rest_framework.authtoken.models import Token
+
+@swagger_auto_schema(request_body = RegistrationSerializer, method = 'post')
+@api_view(['POST', ])
+def visualizaRegistro(request):
+    
+    if request.method == 'POST':
+        serializer = RegistrationSerializer(data=request.data)
+        data = {}
+        if serializer.is_valid():
+            usuario = serializer.save()
+            data['response'] = "Usuário registrado com sucesso"
+            data['email'] = usuario.email
+            data['username'] = usuario.username
+            token = Token.objects.get(user = usuario).key
+            data['token'] = token
+        else:
+            data = serializer.errors
+        return Response(data)
+
+@swagger_auto_schema(
+    method = 'post',
+    operation_summary = "Logout", 
+    operation_description = "Efetuar Logout",
+    request_body = openapi.Schema(
+        type = openapi.TYPE_OBJECT,
+        required = ['token'],
+        properties = 
+        {
+            'token' : openapi.Schema(type=openapi.TYPE_STRING),
+        },
+    ),
+)
+@api_view(['POST', ])
+def visualizaLogout(request):
+     if request.method == "POST":
+          request.user.auth_token.delete()
+          return Response({"Message":"Logout efetuado!"},status=status.HTTP_200_OK)
+     
+
+@api_view(['GET',])
+@permission_classes((IsAuthenticated,))
+def visualizaPropriedadesUsuario(request):
+    try:
+        usuario = request.user
+    except Usuario.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+    
+    if request.method == 'GET':
+        serializer = AccountPropertiesSerializer(usuario)
+        return Response(serializer.data)
+    
+
+@swagger_auto_schema(request_body = RegistrationSerializer, method = 'put')
+@api_view(['PUT',])
+@permission_classes((IsAuthenticated,))
+def visualizaAtualizaUsuario(request):
+    try:
+        usuario = request.user
+    except Usuario.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+    
+    if request.method == 'PUT':
+        serializer = AccountPropertiesSerializer(usuario, data=request.data)
+        data = {}
+        if serializer.is_valid():
+            serializer.save()
+            data['response'] = "Conta atuliazada com sucesso!"
+            return Response(data=data)
+        
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+@swagger_auto_schema(
+    method = 'post',
+    operation_summary = "Apagar conta", 
+    operation_description = "Apagar conta",
+    request_body = openapi.Schema(
+        type = openapi.TYPE_OBJECT,
+        required = ['username','password'],
+        properties = 
+        {
+            'username' : openapi.Schema(type=openapi.TYPE_STRING),
+            'password' : openapi.Schema(type=openapi.TYPE_STRING),
+        },
+    ),
+)
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def apagaUsuario(request):
+    serializer = AccountDeleteSerializer(data=request.data)
+    if serializer.is_valid():
+        user = request.user
+        if user.check_password(serializer.validated_data['password']) and user.username == serializer.validated_data['username']:
+            user.delete()
+            return Response({'message': 'Usuario apagado.'}, status=status.HTTP_204_NO_CONTENT)
+        else:
+            return Response({'error': 'Senha ou usuario incorreto'}, status=status.HTTP_400_BAD_REQUEST)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class ObtainAuthTokenView(APIView):
+    authentication_classes = []
+    permission_classes = []
+
     @swagger_auto_schema(
-        operation_summary = 'obtem o token de autenticacao',
-        operation_description = 'retorna o token em caso de sucesso ou 401',
+        operation_summary = "Login", 
+        operation_description = "Efetua Login",
         request_body = openapi.Schema(
             type = openapi.TYPE_OBJECT,
+            required = ['username','password'],
             properties = {
-                'username': openapi.Schema(),
-                'password': openapi.Schema(),
+                'username' : openapi.Schema(type=openapi.TYPE_STRING),
+                'password' : openapi.Schema(type=openapi.TYPE_STRING),
             },
-            required = ['username', 'password', ],
         ),
-        responses = {
-            status.HTTP_200_OK: 'Token is returned.',
-            status.HTTP_401_UNAUTHORIZED: 'Unauthorized request.',
-        },
-    )
-    
-    def post(self, request, *args, **kwargs):
-        serializer = self.serializer_class(data=request.data, context={'request': request})
-        if serializer.is_valid():
-            username = serializer.validated_data['username']
-            password = serializer.validated_data['password']
-            user = authenticate(request, username=username, password=password)
-            if user is not None:
-                token, _ = Token.objects.get_or_create(user=user)
-                login(request, user)
-                return Response({'token': token.key})
-            return Response(status=status.HTTP_401_UNAUTHORIZED)
-    
-    
-    @swagger_auto_schema(
-        operation_summary = 'Obtem username do usuario',
-        operation_description = "Retorna o username ou visitante caso nao esteja logado",
-        security = [{'Token':[]}],
-        manual_parameters = [
-            openapi.Parameter(
-                'Authorization',
-                openapi.IN_HEADER,
-                type = openapi.TYPE_STRING,
-                description = 'Token de autenticacao no formato "token \<<i>valor do token<\i>\>"',
-                default = 'token',
-            )
-        ],
-        responses={
-            200: openapi.Response(
-                description = 'Nome do usuario',
-                schema=openapi.Schema(
-                    type=openapi.TYPE_OBJECT,
-                    properties={'username' : openapi.Schema(type=openapi.TYPE_STRING)},
-                ),
-            )
-        },
     )
 
-    def get(self, request):
-        '''
-        Parâmetros: token de acesso
-        Retorna: username ou 'visitante'
-        '''
+    def post(self, request):
+        context = {}
 
-        try:
-            token = request.META.get('HTTP_AUTHORIZATION').split(' ')[1]
-            token_obj = Token.objects.get(key=token)
-            user = token_obj.user
-            return Response(
-                {'username': user.username},
-                status = status.HTTP_200_OK)
-        except (Token.DoesNotExist, AttributeError):
-            return Response(
-                {'username': 'visitante'},
-                status = status.HTTP_404_NOT_FOUND)
-        
+        email = request.POST.get('username')
+        password = request.POST.get('password')
+        usuario = authenticate(email=email, password=password)
+        if usuario:
+            try:
+                token = Token.objects.get(user=usuario)
+            except Token.DoesNotExist:
+                token = Token.objects.create(user=usuario)
+                context['response'] = 'Autentificacao certa'
+                context['pk'] = usuario.pk
+                context['email'] = email
+                context['token'] = token.key
+            else:
+                context['response'] = 'Error'
+                context['error_message'] = 'Credenciais Invalidas'
+
+        return Response(context)
+     
+    
