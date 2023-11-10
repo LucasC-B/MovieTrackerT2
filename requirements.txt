@@ -3,5 +3,4 @@ djangorestframework
 pillow
 setuptools
 django-cors-headers
-pkg-resources==0.0.0
 drf-yasg

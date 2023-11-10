@@ -8,15 +8,15 @@ from django.contrib.auth import authenticate
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
 
-from  .serializers import RegistrationSerializer, AccountPropertiesSerializer, AccountDeleteSerializer
+from usuarios.serializers import RegistraSerializer, PropriedadesUsuarioSerializer, ApagaUsuarioSerializer
 from rest_framework.authtoken.models import Token
 
-@swagger_auto_schema(request_body = RegistrationSerializer, method = 'post')
+@swagger_auto_schema(request_body = RegistraSerializer, method = 'post')
 @api_view(['POST', ])
 def visualizaRegistro(request):
     
     if request.method == 'POST':
-        serializer = RegistrationSerializer(data=request.data)
+        serializer = RegistraSerializer(data=request.data)
         data = {}
         if serializer.is_valid():
             usuario = serializer.save()
@@ -58,11 +58,11 @@ def visualizaPropriedadesUsuario(request):
         return Response(status=status.HTTP_404_NOT_FOUND)
     
     if request.method == 'GET':
-        serializer = AccountPropertiesSerializer(usuario)
+        serializer = PropriedadesUsuarioSerializer(usuario)
         return Response(serializer.data)
     
 
-@swagger_auto_schema(request_body = RegistrationSerializer, method = 'put')
+@swagger_auto_schema(request_body = RegistraSerializer, method = 'put')
 @api_view(['PUT',])
 @permission_classes((IsAuthenticated,))
 def visualizaAtualizaUsuario(request):
@@ -72,7 +72,7 @@ def visualizaAtualizaUsuario(request):
         return Response(status=status.HTTP_404_NOT_FOUND)
     
     if request.method == 'PUT':
-        serializer = AccountPropertiesSerializer(usuario, data=request.data)
+        serializer = PropriedadesUsuarioSerializer(usuario, data=request.data)
         data = {}
         if serializer.is_valid():
             serializer.save()
@@ -99,7 +99,7 @@ def visualizaAtualizaUsuario(request):
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def apagaUsuario(request):
-    serializer = AccountDeleteSerializer(data=request.data)
+    serializer = ApagaUsuarioSerializer(data=request.data)
     if serializer.is_valid():
         user = request.user
         if user.check_password(serializer.validated_data['password']) and user.username == serializer.validated_data['username']:

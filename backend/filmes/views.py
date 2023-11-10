@@ -15,6 +15,7 @@ from drf_yasg import openapi
 # Create your views here.
 
 @swagger_auto_schema(
+            method = 'get',
             operation_summary="Dados de um filme",
             operation_description="Obter todas as informações sobre o filme selecionado",
             request_body=None,
@@ -39,6 +40,7 @@ def api_detail_filme_view(request,slug):
 
 
 @swagger_auto_schema(
+            method = 'put',
             operation_summary="Atualiza filme",
             operation_description="Atualizar um filme existente",
             request_body=openapi.Schema(
@@ -85,6 +87,7 @@ def api_update_filme_view(request,slug):
 
 
 @swagger_auto_schema(
+            method = 'delete',
             operation_description='Deleta filme',
             request_body=FilmeSerializer,
             responses={204: FilmeSerializer(), 400: None},
@@ -112,6 +115,7 @@ def api_delete_filme_view(request,slug):
         return Response(data=data)
 
 @swagger_auto_schema(
+        method = 'post',
         operation_summary='Cria filme', 
         operation_description="Criar um novo filme",
         request_body=openapi.Schema(
