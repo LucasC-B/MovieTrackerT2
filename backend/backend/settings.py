@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
+import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -25,28 +26,47 @@ SECRET_KEY = 'django-insecure-&=@dqmr-!*6ds24&4jq^=*%n9n)26d#u8!s^a-2v^%6&ntd30v
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
 
 INSTALLED_APPS = [
-    'django.contrib.admin',
+    #meus apps
+    'filmes',
+    'usuarios',
+    #django apps
+'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'rest_framework',   # REST
-    'filmes',
-    'usuarios',
-    'corsheaders',      # CORS
-    'drf_yasg',         # swagger
-    'coreapi',          # swagger
+    'rest_framework',
     'rest_framework.authtoken',
-    'django_rest_passwordreset', 
-    
+    'rest_framework_swagger', 
+    'drf_yasg',
+    'coreapi',
+    'corsheaders',
 ]
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.TokenAuthentication',   
+    ),
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 10,
+    'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema',
+}
+
+CORS_ORIGIN_WHITELIST = [
+    'http://0.0.0.0:8080',
+    'http://127.0.0.1:8080',
+    'http://localhost:8080',
+]
+
+CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOW_CREDENTIALS = True
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -63,7 +83,7 @@ ROOT_URLCONF = 'backend.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -75,6 +95,10 @@ TEMPLATES = [
         },
     },
 ]
+
+FILMES_PER_PAGE = 5
+
+AUTH_USER_MODEL = 'usuarios.Usuario'
 
 WSGI_APPLICATION = 'backend.wsgi.application'
 
@@ -124,18 +148,17 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
-STATIC_URL = 'static/'
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'static'),
+    os.path.join(BASE_DIR, 'media')
+]    
+
+STATIC_URL = '/static/'
+MEDIA_URL = '/media/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'static_cdn')
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media_cdn')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
-REST_FRAMEWORK = {
-    'DEFAULT_SCHEMA_CLASS':
-    'rest_framework.schemas.corepai.AutoSchema',
-    'DEFAULT_AUTHENTICATION_CLASS': [
-        'rest_framework.authentication.TokenAuthentication',
-    ], 
-    
-}

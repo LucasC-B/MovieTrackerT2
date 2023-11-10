@@ -38,8 +38,10 @@ schema_view = yasg_schema_view(
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+
     path("filmes/", include('filmes.urls')),
     path("usuarios/", include('usuarios.urls')),
+    
     path("docs/",
          include_docs_urls(titled='Documentação da API')),
     path("swagger/",
