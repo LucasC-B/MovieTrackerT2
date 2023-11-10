@@ -33,9 +33,8 @@ schema_view = yasg_schema_view(
         license=openapi.License(name='GNU GPLv3'),
     ),
     public=True,
-    permission_classes=(permissions.AllowAny),
+    permission_classes=[permissions.AllowAny],
 )
-
 urlpatterns = [
     path('admin/', admin.site.urls),
 
@@ -43,9 +42,7 @@ urlpatterns = [
     path("usuarios/", include('usuarios.urls')),
     
     path("docs/", include_docs_urls(title='Documentação da API')),
-    path("swagger/",
-         schema_view.with_ui('swagger', cache_timeout=0),
-         name='schema-swagger-ui'),
+    path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
     path("api/v1/",
          include(routers.DefaultRouter().urls)),
     path('openapi', 
@@ -54,4 +51,3 @@ urlpatterns = [
              description="API para obter dados dos filmes"),
         name='openapi-schema'),
 ]
-

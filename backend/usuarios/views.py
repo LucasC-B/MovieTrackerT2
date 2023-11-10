@@ -2,6 +2,7 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.authentication import TokenAuthentication
 from usuarios.models import Usuario
 from rest_framework.views import APIView
 from django.contrib.auth import authenticate
@@ -23,7 +24,8 @@ def visualizaRegistro(request):
             data['response'] = "Usuário registrado com sucesso"
             data['email'] = usuario.email
             data['username'] = usuario.username
-            token = Token.objects.get(user = usuario).key
+            token_obj, created = Token.objects.get_or_create(user=usuario)
+            token = token_obj.key
             data['token'] = token
         else:
             data = serializer.errors
@@ -111,8 +113,8 @@ def apagaUsuario(request):
 
 
 class ObtainAuthTokenView(APIView):
-    authentication_classes = []
-    permission_classes = []
+    authentication_classes = [TokenAuthentication,]
+    permission_classes = [IsAuthenticated,]
 
     @swagger_auto_schema(
         operation_summary = "Login", 
@@ -126,7 +128,6 @@ class ObtainAuthTokenView(APIView):
             },
         ),
     )
-
     def post(self, request):
         context = {}
 
