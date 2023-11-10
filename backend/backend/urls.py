@@ -42,8 +42,7 @@ urlpatterns = [
     path("filmes/", include('filmes.urls')),
     path("usuarios/", include('usuarios.urls')),
     
-    path("docs/",
-         include_docs_urls(titled='Documentação da API')),
+    path("docs/", include_docs_urls(title='Documentação da API')),
     path("swagger/",
          schema_view.with_ui('swagger', cache_timeout=0),
          name='schema-swagger-ui'),
@@ -51,8 +50,8 @@ urlpatterns = [
          include(routers.DefaultRouter().urls)),
     path('openapi', 
          get_schema_view(
-             title="API para Carros",
-             description="API para obter dados dos carros"),
+             title="API para Filmes",
+             description="API para obter dados dos filmes"),
         name='openapi-schema'),
 ]
 
