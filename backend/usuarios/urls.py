@@ -1,6 +1,8 @@
 from django.urls import path
 from usuarios import views
 
+app_name = 'usuarios'
+
 urlpatterns = [
-    path('token_auth/', views.CustomAuthToken.as_view(), name='token-auth')
+    
 ]
