@@ -131,21 +131,22 @@ class ObtainAuthTokenView(APIView):
     def post(self, request):
         context = {}
 
-        email = request.POST.get('username')
+        email = request.POST.get('email')
         password = request.POST.get('password')
         usuario = authenticate(email=email, password=password)
+
         if usuario:
             try:
                 token = Token.objects.get(user=usuario)
             except Token.DoesNotExist:
                 token = Token.objects.create(user=usuario)
-                context['response'] = 'Autentificacao certa'
-                context['pk'] = usuario.pk
-                context['email'] = email
-                context['token'] = token.key
-            else:
-                context['response'] = 'Error'
-                context['error_message'] = 'Credenciais Invalidas'
+            context['response'] = 'Autentificacao certa'
+            context['pk'] = usuario.pk
+            context['email'] = email
+            context['token'] = token.key
+        else:
+            context['response'] = 'Error'
+            context['error_message'] = 'Credenciais Invalidas'
 
         return Response(context)
      

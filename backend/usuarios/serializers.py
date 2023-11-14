@@ -3,7 +3,7 @@ from usuarios.models import Usuario
 
 class RegistraSerializer(serializers.ModelSerializer):
 
-    password2 = serializers.CharField(style={'input_type':'passowrd'},write_only = True)
+    password2 = serializers.CharField(style={'input_type':'password'},write_only = True)
 
     class Meta:
         model = Usuario
@@ -21,7 +21,7 @@ class RegistraSerializer(serializers.ModelSerializer):
         password2 = self.validated_data['password2']
 
         if password != password2:
-            raise serializers.ValidationError({'password': 'senhas não são iguais'})
+            raise serializers.ValidationError({'password': 'Senhas não são iguais!'})
         usuario.set_password(password)
         usuario.save()
 
