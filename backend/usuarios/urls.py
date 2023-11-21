@@ -5,7 +5,7 @@ from usuarios.views import(
     visualizaAtualizaUsuario,
     ObtainAuthTokenView,
     visualizaLogout,
-    apagaUsuario,
+    visualizaApagaUsuario,
 )
 
 app_name = "usuarios"
@@ -16,5 +16,5 @@ urlpatterns = [
     path('logout', visualizaLogout, name='logout'),
     path('properties', visualizaPropriedadesUsuario, name="properties"),
     path('properties/update', visualizaAtualizaUsuario, name="update"),
-    path('properties/delete-usuario', apagaUsuario, name='usuario-delete'),
+    path('properties/delete-usuario', visualizaApagaUsuario, name='usuario-delete'),
 ]

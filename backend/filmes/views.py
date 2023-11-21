@@ -27,7 +27,7 @@ from drf_yasg import openapi
             ]
 )
 @api_view(['GET', ])
-@permission_classes((IsAuthenticated,))
+@permission_classes([IsAuthenticated,])
 def api_detail_filme_view(request,slug):
     try:
         filme = Filme.objects.get(slug=slug)
@@ -62,7 +62,7 @@ def api_detail_filme_view(request,slug):
                                   required=True, description='Titulo do filme na URL')],
 )
 @api_view(['PUT', ])
-@permission_classes((IsAuthenticated,))
+@permission_classes([IsAuthenticated,])
 def api_update_filme_view(request,slug):
     try:
         filme = Filme.objects.get(slug=slug)
@@ -93,7 +93,7 @@ def api_update_filme_view(request,slug):
             responses={204: FilmeSerializer(), 400: None},
 )
 @api_view(['DELETE', ])
-@permission_classes((IsAuthenticated,))
+@permission_classes([IsAuthenticated,])
 def api_delete_filme_view(request,slug):
     try:
         filme = Filme.objects.get(slug=slug)
@@ -134,7 +134,7 @@ def api_delete_filme_view(request,slug):
         responses={201: FilmeSerializer(), 400: 'Dados errados',},
 )
 @api_view(['POST', ])
-@permission_classes((IsAuthenticated,))
+@permission_classes([IsAuthenticated,])
 def api_create_filme_view(request):
     usuario = request.user
 

@@ -11,17 +11,6 @@ header{
     background-color: #454545;
 }
 
-iframe {
-    width: 100%;
-    height: 300px;
-    /* Ajuste a altura conforme necessário */
-    border: none;
-}
-
-main {
-    flex: 1;
-}
-
 footer {
     position: fixed;
     left: 0;
@@ -31,19 +20,25 @@ footer {
     text-align: center;
 }
 
-/* Classe CSS personalizada para controlar o tamanho da imagem */
-.logo-img {
-    width: 100px;
-    /* Largura desejada */
-    height: auto;
-    /* Altura automática para manter a proporção */
+main {
+    flex: 1;
 }
 
-/* Estilos para posicionar a imagem no canto superior esquerdo */
+
+iframe {
+    width: 100%;
+    height: 300px;
+    border: none;
+}
+
+
+.logo-img {
+    width: 100px;
+    height: auto;
+}
+
 .logo-container {
     position: absolute;
     top: 15px;
-    /* Distância do topo da tela */
     left: 10px;
-    /* Distância da borda esquerda da tela */
 }

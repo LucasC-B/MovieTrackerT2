@@ -1,20 +1,45 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-    <head>
-        <script src="javascript/accounts/autenticacao.js"></script>
-        <script src="javascript/constantes.js"></script>
-        <link rel="stylesheet" href="css/style.css">
-    </head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    <body>
-        <a href="/" target="_top">Home</a>
-        <div id="unlogged" class="visivel">
-            | <a href="login.html" target="_top">Login</a>
+<!-- Bootstrap CSS v5.2.1 -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet"
+integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
+
+<script src="/frontend/public/javascript/autentificacao.js"></script>
+<script src="/frontend/public/javascript/constantes.js"></script>
+<link rel="stylesheet" href="/frontend/public/css/header.css">
+
+<header class="p-3 text-bg-dark">
+    <div class="container">
+
+        <div class="logo-container">
+            <img class="img-fluid logo-img" src="/frontend/public/images/Movie_Tracker_Logo.png" alt="Movie Tracker">
         </div>
-        <div id="logged" class="invisivel">
-            | <a href="logout.html" target="_top">Logout</a>
-        </div>
-        | Voce eh <div id="identificacao" class="mesmaLinha"></div>
-        <hr>
-    </body>
-</html>
+
+      <div class="d-flex flex-wrap align-items-center justify-content-start justify-content-lg-start">
+            <a class="d-flex align-items-center text-white text-decoration-none">
+                Bem-Vindo, <div id="id" class="mesmaLinha"> </div>  
+            </a>
+
+            <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+                <li><a href="../index.html"  target="_top" class="nav-link px-2 text-white">| Home</a></li>
+            </ul>
+            
+
+            <div id="deslogado" class= "visivel">
+                <div class="text-end">
+                    <a role="button" target="_top" href="../login.html" class="btn btn-outline-light me-2">Login</a>
+                    <a role="button" target="_top" href="../registra.html"  class="btn btn-warning">Registrar-se</a>
+                </div>
+
+            </div>
+           
+            <div id="logado" class= "invisivel">
+                <div class="text-end">
+                    <a role="button" target="_top" href="../logout.html" class="btn btn-outline-light me-2">Logout</a>
+                    <a role="button" target="_top" href="#"  class="btn btn-warning">Conta</a>
+                </div>
+            </div>
+      </div>
+    </div>
+</header>

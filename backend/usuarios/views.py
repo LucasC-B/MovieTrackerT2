@@ -1,27 +1,26 @@
 from rest_framework import status
 from rest_framework.response import Response
-from rest_framework.decorators import api_view, permission_classes
+from rest_framework.decorators import api_view, permission_classes,authentication_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.authentication import TokenAuthentication
 from usuarios.models import Usuario
 from rest_framework.views import APIView
-from django.contrib.auth import authenticate
+from django.contrib.auth import authenticate, login, logout
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
-
 from usuarios.serializers import RegistraSerializer, PropriedadesUsuarioSerializer, ApagaUsuarioSerializer
 from rest_framework.authtoken.models import Token
 
-@swagger_auto_schema(request_body = RegistraSerializer, method = 'post')
+
+
 @api_view(['POST', ])
 def visualizaRegistro(request):
-    
     if request.method == 'POST':
         serializer = RegistraSerializer(data=request.data)
         data = {}
         if serializer.is_valid():
             usuario = serializer.save()
-            data['response'] = "Usuário registrado com sucesso"
+            data['response'] = "Registro bem sucedido!"
             data['email'] = usuario.email
             data['username'] = usuario.username
             token_obj, created = Token.objects.get_or_create(user=usuario)
@@ -31,42 +30,37 @@ def visualizaRegistro(request):
             data = serializer.errors
         return Response(data)
 
-@swagger_auto_schema(
-    method = 'post',
-    operation_summary = "Logout", 
-    operation_description = "Efetuar Logout",
-    request_body = openapi.Schema(
-        type = openapi.TYPE_OBJECT,
-        required = ['token'],
-        properties = 
-        {
-            'token' : openapi.Schema(type=openapi.TYPE_STRING),
-        },
-    ),
-)
-@api_view(['POST', ])
+
+@api_view(['DELETE', ])
 def visualizaLogout(request):
-     if request.method == "POST":
-          request.user.auth_token.delete()
-          return Response({"Message":"Logout efetuado!"},status=status.HTTP_200_OK)
-     
-
-@api_view(['GET',])
-@permission_classes((IsAuthenticated,))
-def visualizaPropriedadesUsuario(request):
     try:
-        usuario = request.user
-    except Usuario.DoesNotExist:
-        return Response(status=status.HTTP_404_NOT_FOUND)
+        header_autentica = request.META.get('HTTP_AUTHORIZATION')
+        if not header_autentica or not header_autentica.startswith('Bearer '):
+            return Response({'msg': 'Token inválido ou ausente.'}, status = status.HTTP_400_BAD_REQUEST)
+        
+        token = header_autentica.split(' ')[1]
+        token_obj = Token.objects.get(key = token)
+
+        user = token_obj.user
+        if user.is_authenticated:
+            request.user = user
+            logout(request)
+            token_obj.delete()
+            return Response({'msg': 'Logout efetuado.'}, status=status.HTTP_200_OK)
+        else:
+            return Response({'msg': 'Usuário não autenticado.'}, status=status.HTTP_403_FORBIDDEN)
     
-    if request.method == 'GET':
-        serializer = PropriedadesUsuarioSerializer(usuario)
-        return Response(serializer.data)
+    except Token.DoesNotExist:
+        print('Token inexistente.')
+        return Response({'msg': 'Token inexistente.'}, status=status.HTTP_400_BAD_REQUEST)
+    except IndexError:
+        print('Formato de token inválido.')
+        return Response({'msg': 'Formato de token inválido.'}, status=status.HTTP_400_BAD_REQUEST)
+
     
 
-@swagger_auto_schema(request_body = RegistraSerializer, method = 'put')
+@permission_classes([IsAuthenticated,])
 @api_view(['PUT',])
-@permission_classes((IsAuthenticated,))
 def visualizaAtualizaUsuario(request):
     try:
         usuario = request.user
@@ -84,23 +78,10 @@ def visualizaAtualizaUsuario(request):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-@swagger_auto_schema(
-    method = 'post',
-    operation_summary = "Apagar conta", 
-    operation_description = "Apagar conta",
-    request_body = openapi.Schema(
-        type = openapi.TYPE_OBJECT,
-        required = ['username','password'],
-        properties = 
-        {
-            'username' : openapi.Schema(type=openapi.TYPE_STRING),
-            'password' : openapi.Schema(type=openapi.TYPE_STRING),
-        },
-    ),
-)
-@api_view(['POST'])
+
 @permission_classes([IsAuthenticated])
-def apagaUsuario(request):
+@api_view(['POST'])
+def visualizaApagaUsuario(request):
     serializer = ApagaUsuarioSerializer(data=request.data)
     if serializer.is_valid():
         user = request.user
@@ -112,26 +93,30 @@ def apagaUsuario(request):
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class ObtainAuthTokenView(APIView):
-    authentication_classes = [TokenAuthentication,]
-    permission_classes = [IsAuthenticated,]
+@permission_classes([IsAuthenticated,])
+@api_view(['GET',])
+def visualizaPropriedadesUsuario(request):
+    try:
+        usuario = request.user
+    except Usuario.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+    
+    if request.method == 'GET':
+        serializer = PropriedadesUsuarioSerializer(usuario)
+        return Response(serializer.data)
+    
 
-    @swagger_auto_schema(
-        operation_summary = "Login", 
-        operation_description = "Efetua Login",
-        request_body = openapi.Schema(
-            type = openapi.TYPE_OBJECT,
-            required = ['username','password'],
-            properties = {
-                'username' : openapi.Schema(type=openapi.TYPE_STRING),
-                'password' : openapi.Schema(type=openapi.TYPE_STRING),
-            },
-        ),
-    )
+class ObtainAuthTokenView(APIView):
+    authentication_classes = []
+    permission_classes = []
+
+
     def post(self, request):
         context = {}
 
-        email = request.POST.get('email')
+        email = request.data.get('username')
+        if email == None:
+            email = request.data.get('email')
         password = request.POST.get('password')
         usuario = authenticate(email=email, password=password)
 
@@ -140,14 +125,26 @@ class ObtainAuthTokenView(APIView):
                 token = Token.objects.get(user=usuario)
             except Token.DoesNotExist:
                 token = Token.objects.create(user=usuario)
-            context['response'] = 'Autentificacao certa'
+
+            context['response'] = 'Autentificação bem sucedida!'
             context['pk'] = usuario.pk
             context['email'] = email
             context['token'] = token.key
+            login(request, usuario)
         else:
             context['response'] = 'Error'
-            context['error_message'] = 'Credenciais Invalidas'
+            context['error_message'] = 'Credenciais inválidas!'
 
         return Response(context)
-     
     
+
+
+    def get (self, request):
+        try:
+            token = request.META.get('HTTP_AUTHORIZATION').split(' ')[1]
+            token_obj = Token.objects.get(key=token)
+            usuario = token_obj.user
+            return Response({'username' : usuario.username}, status = status.HTTP_200_OK)
+        
+        except (Token.DoesNotExist, AttributeError):
+            return Response({'username' : 'visitante'}, status=status.HTTP_404_NOT_FOUND)
