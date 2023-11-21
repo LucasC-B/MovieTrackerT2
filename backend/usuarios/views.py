@@ -32,10 +32,12 @@ def visualizaRegistro(request):
 
 
 @api_view(['DELETE', ])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated,])
 def visualizaLogout(request):
     try:
         header_autentica = request.META.get('HTTP_AUTHORIZATION')
-        if not header_autentica or not header_autentica.startswith('Bearer '):
+        if not header_autentica or not header_autentica.startswith('Token '):
             return Response({'msg': 'Token inválido ou ausente.'}, status = status.HTTP_400_BAD_REQUEST)
         
         token = header_autentica.split(' ')[1]
@@ -83,27 +85,32 @@ def visualizaAtualizaUsuario(request):
 @api_view(['POST'])
 def visualizaApagaUsuario(request):
     serializer = ApagaUsuarioSerializer(data=request.data)
+    data = {}
+
     if serializer.is_valid():
         user = request.user
         if user.check_password(serializer.validated_data['password']) and user.username == serializer.validated_data['username']:
             user.delete()
+            data['response'] = "Conta foi apagada."
             return Response({'message': 'Usuario apagado.'}, status=status.HTTP_204_NO_CONTENT)
         else:
+            data['response'] = "Senha ou usuario incorreto."
             return Response({'error': 'Senha ou usuario incorreto'}, status=status.HTTP_400_BAD_REQUEST)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 @permission_classes([IsAuthenticated,])
+@authentication_classes([TokenAuthentication,])
 @api_view(['GET',])
 def visualizaPropriedadesUsuario(request):
     try:
         usuario = request.user
-    except Usuario.DoesNotExist:
-        return Response(status=status.HTTP_404_NOT_FOUND)
-    
-    if request.method == 'GET':
         serializer = PropriedadesUsuarioSerializer(usuario)
         return Response(serializer.data)
+    except Exception as erro:
+        print(f'Erro inesperado: {erro}')
+        return Response({'msg' : str(erro)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    
     
 
 class ObtainAuthTokenView(APIView):

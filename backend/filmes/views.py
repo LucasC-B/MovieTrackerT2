@@ -1,5 +1,4 @@
-from filmes.serializers import FilmeSerializer
-from rest_framework.views import APIView
+from filmes.serializers import FilmeSerializer, FilmeAtualizaSerializer, FilmeCriaSerializer
 from filmes.models import Filme
 from rest_framework import status
 from rest_framework.response import Response
@@ -27,7 +26,6 @@ from drf_yasg import openapi
             ]
 )
 @api_view(['GET', ])
-@permission_classes([IsAuthenticated,])
 def api_detail_filme_view(request,slug):
     try:
         filme = Filme.objects.get(slug=slug)
@@ -56,10 +54,6 @@ def api_detail_filme_view(request,slug):
                     'visto': openapi.Schema(default='', description='Usuario viu o filme', type=openapi.TYPE_STRING),
                 },
             ),
-            responses={200: FilmeSerializer(), 400: FilmeSerializer()},
-            manual_parameters=[
-                openapi.Parameter('titulo_filme', openapi.IN_PATH, default=41, type=openapi.TYPE_STRING,
-                                  required=True, description='Titulo do filme na URL')],
 )
 @api_view(['PUT', ])
 @permission_classes([IsAuthenticated,])
@@ -74,14 +68,24 @@ def api_update_filme_view(request,slug):
         return Response({'response':'Você não tem permissao para editar esse filme'})
     
     if request.method == "PUT":
-        serializer = FilmeSerializer(filme, data=request.data)
-        data = {}
-
+        serializer = FilmeAtualizaSerializer(filme, data=request.data, partial = True)
         if serializer.is_valid():
             serializer.save()
-            data["success"] = "Filme atualizado com sucesso!"
+            data = {
+                'response': 'Filme atualizado!',
+                'pk' : filme.pk,
+                'titulo' : filme.titulo,
+                'nacionalidade' : filme.nacionalidade,
+                'ano' : filme.ano,
+                'sinopse' : filme.sinopse,
+                'diretor' : filme.diretor,
+                'nota' : filme.nota,
+                'review' : filme.review,
+                'visto' : filme.visto,
+                'slug' : filme.slug,
+            }
             
-            return Response(data=data)
+            return Response(data)
         
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -102,7 +106,7 @@ def api_delete_filme_view(request,slug):
     
     user = request.user
     if filme.usuario != user:
-        return Response({'response':'Você não tem permissao para excluir esse filme'})
+        return Response({'response':'Você não tem permissao para excluir esse filme!'})
     
     if request.method == "DELETE":
         operation = filme.delete()
@@ -136,23 +140,23 @@ def api_delete_filme_view(request,slug):
 @api_view(['POST', ])
 @permission_classes([IsAuthenticated,])
 def api_create_filme_view(request):
-    usuario = request.user
-
-    filme = Filme(usuario=usuario)
 
     if request.method == "POST":
-        serializer = FilmeSerializer(filme,data=request.data)
+        data = request.POST.copy()
+        data.update(request.FILES)
+        data['usuario'] = request.user.pk
+        serializer = FilmeCriaSerializer(data=data)
 
         if serializer.is_valid():
             serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
+            return Response({'response': 'Filme foi criado!'})
+        else:
+            return Response(serializer.errors, status=400)
         
     return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
 
 class ApiFilmeListView(ListAPIView):
     queryset = Filme.objects.all()
     serializer_class = FilmeSerializer
-    authentication_classes = [TokenAuthentication,]
-    permission_classes = [IsAuthenticated,]
     pagination_class = PageNumberPagination
         
