@@ -1,3 +1,7 @@
+.mesmaLinha {
+    display: inline;
+}
+
 .visivel {
     display: inline !important; 
 }
@@ -6,9 +10,6 @@
     display: none !important; 
 }
 
-.mesmaLinha {
-    display: inline;
-}
 
 .logo-img {
     width: 100px; 

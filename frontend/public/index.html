@@ -10,7 +10,8 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
     <link rel="stylesheet" href="css/style.css">
-    <script src="javascript/partesFilmes.js"></script>
+    <script src="javascript/listaFilmes.js"></script>
+    <script src="javascript/constantes.js"></script>
 </head>
 
 <body style="margin: 0; padding: 0; display: flex; flex-direction: column;">
@@ -20,8 +21,27 @@
 
     <main>
         <div class="container">
-            <div class="row" id="filmeList">
-                
+            <div class="row">
+                <div class="container-create-filme">
+                    <div class="card create-filme-bar col-lg-4 offset-lg-8 flex-column text-bg-dark mt-5">
+                        <div class="d-flex flex-column p-3 text-bg-dark">
+                            <img class="logo-img"
+                                src="frontend/public/images/Movie_Tracker_Logo.png" width="72" height="72">
+                                <h3 class="text-center text-bg-dark">Poste o sobre um filme!</h3>
+                                <p class="m-auto"><a class="btn btn-warning" href="../public/criaFilme.html">Criar filme</a></p>
+                                <p>Opine sobre os seus filmes favoritos!</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="left-column col-lg-6 offset-lg-1">
+                <div class="filme-container mt-1">
+                    <div class="container-filme">
+                        <div class="row" id="filmeList">
+                        <!-- Lista de Filmes -->
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </main>

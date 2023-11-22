@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+      
+        <!-- Bootstrap CSS v5.2.1 -->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
+        <script src="javascript/constantes.js"></script>
+        <script src="javascript/criaFilme.js"></script>
+    </head>
+
+    <body>
+        <header>
+            <iframe src="partes/header.html" frameborder="0" height="72px" width="100%"></iframe>
+        </header>
+
+        <main>
+            <div class="container mt-5 ">
+                <div class="row justify-content-center ">
+                    <div class="col-md-6 ">
+                        <div class="card text-bg-dark">
+                            <div class="card-header ">
+                                <h3 class="text-center">Criar Filme</h3>
+                            </div>
+                            <div class="card-body">
+                                <form enctype="multipart/form-data">
+                                    <div class="mb-3">
+                                        <label for="id_titulo" class="form-label">Título</label>
+                                        <input type="text" name="titulo" class="form-control text-bg-dark" id="titulo" placeholder="Título" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="id_nacinalidade" class="form-label">Nacionalidade</label>
+                                        <input type="text" name="nacionalidade" class="form-control text-bg-dark" id="nacionalidade" placeholder="Nacionalidade" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="id_ano" class="form-label">Ano</label>
+                                        <input type="number" name="ano" class="form-control text-bg-dark" id="ano" placeholder="Ano" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="id_sinopse" class="form-label">Sinopse</label>
+                                        <input type="text" name="sinopse" class="form-control text-bg-dark" id="sinopse" placeholder="Sinopse">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="id_diretor" class="form-label">Diretor</label>
+                                        <input type="text" name="diretor" class="form-control text-bg-dark" id="diretor" placeholder="Diretor" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="id_nota" class="form-label">Nota</label>
+                                        <input type="number" name="nota" class="form-control text-bg-dark" id="nota" placeholder="Nota" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="id_review" class="form-label">Review</label>
+                                        <input type="text" name="review" class="form-control text-bg-dark" id="review" placeholder="Review" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="id_visto" class="form-label">Visto</label>
+                                        <input type="checkbox" name="visto" class="form-control text-bg-dark" id="visto" placeholder="Voce viu esse filme?">
+                                    </div>
+                                    <div class="text-center">
+                                        <button type="submit" id="btnPost" class="btn btn-warning">POSTAR</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+        <footer>
+            <iframe src="partes/footer.html" frameborder="0" style="width: 100%; height: auto;"></iframe>
+        </footer>
+          <!-- Bootstrap JavaScript Libraries -->
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"
+            integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous">
+        </script>
+
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.min.js"
+            integrity="sha384-7VPbUDkoPSGFnVtYi0QogXtr74QeVeeIs99Qfg5YCF+TidwNdjvaKZX19NZ/e6oz" crossorigin="anonymous">
+        </script>
+    </body>
+</html>
