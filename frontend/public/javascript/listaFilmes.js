@@ -61,7 +61,7 @@ function criaListaFilmes(filme) {
     var filmeLink = document.createElement('a');
     filmeLink.style = "text-decoration: none !important";
     filmeLink.className = "link-dark";
-    filmeLink.href = 'detalhesFilme.html?slug=' + filme.slug;
+    filmeLink.href = 'detalhaFilme.html?slug=' + filme.slug;
     filmeLink.addEventListener('click', function (event) {
         event.preventDefault();
         window.location.href = filmeLink.href;

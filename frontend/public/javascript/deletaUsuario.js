@@ -20,14 +20,18 @@ document.addEventListener("DOMContentLoaded", function () {
                 }),
             })
                 .then(function (response) {
+                    if (!response.ok) {
+                        throw new Error('Erro na requisição');
+                    }
                     return response.json();
                 })
                 .then(function (data) {
-                    if (data && data.response === "Conta deletada!") {
+                    console.log(data);
+                    if (data && data.response === "Conta foi apagada.") {
                         msg.innerHTML = "Conta deletada com sucesso!";
                         window.location.assign('index.html');
-                    } else if (data.response) {
-                        msg.innerHTML = data.response;
+                    } else if (data.error) {
+                        msg.innerHTML = data.error;
                     } else {
                         throw new Error("Falha na deleção da conta!");
                     }

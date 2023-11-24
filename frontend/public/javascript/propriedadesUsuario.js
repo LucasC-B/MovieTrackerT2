@@ -43,13 +43,14 @@ document.addEventListener("DOMContentLoaded", function () {
                     return response.json();
                 })
                 .then(function (data) {
+                    console.log(data);
                     if (data.email && data.email.length > 0) {
                         msg.innerHTML = data.email[0];
                     }
                     else if (data.username && data.username.length > 0) {
                         msg.innerHTML = data.username[0];
                     }
-                    else if (data.response === "Conta atualizada com sucesso!") {
+                    else if (data.response === "Conta atuliazada com sucesso!") {
                         msg.innerHTML = "Atualização bem-sucedida!";
                     }
                     else {

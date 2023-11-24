@@ -4,7 +4,7 @@ let usuarioAutorizaPromise = new Promise((resolve, reject) => {
     fetch(backendAddress + 'usuarios/login', {
         method: 'GET',
         headers: {
-            'Authorization': tokenKeyword + token
+            'Authorization': tokenKeyword + localStorage.getItem('token')
         }
     })
     .then(function (response) {

@@ -32,7 +32,8 @@ function deletaFilme(slug) {
         .then(function (response) {
             return response.json();
         }).then(function (data) {
-            if (data.success === "Filme excluído!") {
+            console.log(data);
+            if (data.success === "Filme excluído com sucesso!") {
                 window.location.replace("index.html");
             }
         })

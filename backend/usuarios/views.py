@@ -89,13 +89,14 @@ def visualizaApagaUsuario(request):
 
     if serializer.is_valid():
         user = request.user
-        if user.check_password(serializer.validated_data['password']) and user.username == serializer.validated_data['username']:
+        if user.check_password(serializer.validated_data['password']) and user.email == serializer.validated_data['email']:
             user.delete()
             data['response'] = "Conta foi apagada."
             return Response({'message': 'Usuario apagado.'}, status=status.HTTP_204_NO_CONTENT)
         else:
             data['response'] = "Senha ou usuario incorreto."
             return Response({'error': 'Senha ou usuario incorreto'}, status=status.HTTP_400_BAD_REQUEST)
+    
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
@@ -124,7 +125,8 @@ class ObtainAuthTokenView(APIView):
         email = request.data.get('username')
         if email == None:
             email = request.data.get('email')
-        password = request.POST.get('password')
+        password = request.data.get('password')
+        print(email, password)
         usuario = authenticate(email=email, password=password)
 
         if usuario:

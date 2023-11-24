@@ -1,5 +1,10 @@
 from django.db import models
 from django.conf import settings
+from django.utils.text import slugify
+from random import randint
+from django.db.models.signals import post_delete, pre_save
+
+SLUG_LIST = []
 
 # Create your models here.
 class Filme(models.Model):
@@ -28,4 +33,17 @@ class Filme(models.Model):
         managed = True
     
     def __str__(self):
+
         return self.titulo
+    
+def pre_save_filme_receiever(sender,instance, *args, **kwargs):
+
+    if not instance.slug:
+        slug_random = 0
+        while slug_random not in SLUG_LIST:
+            slug_random = randint(0,1000)
+            SLUG_LIST.append(slug_random)
+            
+        instance.slug = slugify(instance.usuario.username + "-" + str(slug_random))
+
+pre_save.connect(pre_save_filme_receiever, sender=Filme)

@@ -71,6 +71,7 @@ def api_update_filme_view(request,slug):
         serializer = FilmeAtualizaSerializer(filme, data=request.data, partial = True)
         if serializer.is_valid():
             serializer.save()
+            print("aaa")
             data = {
                 'response': 'Filme atualizado!',
                 'pk' : filme.pk,
@@ -140,11 +141,10 @@ def api_delete_filme_view(request,slug):
 @api_view(['POST', ])
 @permission_classes([IsAuthenticated,])
 def api_create_filme_view(request):
-
     if request.method == "POST":
         data = request.POST.copy()
         data.update(request.FILES)
-        data['usuario'] = request.user.pk
+        data['usuario'] = request.user.pk  # Adiciona o usuário diretamente
         serializer = FilmeCriaSerializer(data=data)
 
         if serializer.is_valid():
@@ -152,8 +152,8 @@ def api_create_filme_view(request):
             return Response({'response': 'Filme foi criado!'})
         else:
             return Response(serializer.errors, status=400)
-        
-    return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
+
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class ApiFilmeListView(ListAPIView):
     queryset = Filme.objects.all()

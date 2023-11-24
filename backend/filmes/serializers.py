@@ -19,14 +19,15 @@ class FilmeCriaSerializer(serializers.ModelSerializer):
     class Meta:
         model = Filme
         fields = ['titulo','nacionalidade','ano','sinopse','diretor', 'nota', 'review',
-                  'visto']
+                  'visto','usuario', 'slug']	
     
     def create(self, validated_data):
         filme = Filme.objects.create(**validated_data)
         return filme
 
+
 class FilmeAtualizaSerializer(serializers.ModelSerializer):
     class Meta:
         model = Filme
         fields = ['titulo','nacionalidade','ano','sinopse','diretor', 'nota', 'review',
-                  'visto']
+                  'visto', 'slug']

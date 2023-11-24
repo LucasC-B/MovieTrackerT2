@@ -34,5 +34,5 @@ class PropriedadesUsuarioSerializer(serializers.ModelSerializer):
         fields = ['pk', 'email', 'username']
 
 class ApagaUsuarioSerializer(serializers.Serializer):
-    username = serializers.CharField()
+    email = serializers.CharField()
     password = serializers.CharField()

@@ -22,6 +22,7 @@ function login(){
         var password = document.getElementById("password").value;
         var msg = document.getElementById("msg");
         
+        console.log(backendAddress + "usuarios/login");
         fetch(backendAddress + "usuarios/login", {
             method: "POST",
             headers: {
@@ -36,7 +37,7 @@ function login(){
             return response.json();
         })
         .then(function (data) {
-            console.log(data.response);
+            console.log(data);
             if (data.response == "Autentificação bem sucedida!") {
                 var token = data.token;
                 localStorage.setItem("token", token);
