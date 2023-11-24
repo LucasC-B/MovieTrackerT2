@@ -9,14 +9,14 @@ class Filme(models.Model):
                               max_length=50, null=False, blank=False)
     ano = models.CharField(help_text='Digite o ano de lancamento do filme', 
                               max_length=50, null=False, blank=False)
-    sinopse = models.CharField(help_text='Digite a sinopse do filme', 
-                              max_length=1000, null=True, blank=True)
+    sinopse = models.TextField(help_text='Digite a sinopse do filme', 
+                              max_length=5000, null=True, blank=True)
     diretor = models.CharField(help_text='Digite o nome do diretor', 
                               max_length=50, null=False, blank=False)
     nota = models.CharField(help_text='Digite a nota que avalia o filme', 
                               max_length=50, null=True, blank=True)
-    review = models.CharField(help_text='Digite um breve review do filme', 
-                              max_length=1000, null=True, blank=True)
+    review = models.TextField(help_text='Digite um breve review do filme', 
+                              max_length=5000, null=True, blank=True)
     visto = models.BooleanField(default=False)
     
     usuario = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)

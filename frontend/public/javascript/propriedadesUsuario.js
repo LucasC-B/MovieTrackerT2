@@ -31,8 +31,8 @@ document.addEventListener("DOMContentLoaded", function () {
             fetch(backendAddress + "usuarios/properties/update", {
                 method: "PUT",
                 headers: {
-                    "Content-Type": "application/json",
                     'Authorization': tokenKeyword + token,
+                    "Content-Type": "application/json",
                 },
                 body: JSON.stringify({
                     email: novoEmail,

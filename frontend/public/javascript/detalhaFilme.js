@@ -15,7 +15,7 @@ function exibeDetalhesFilme(usuarioAutoriza) {
     })
         .then(function (response) {
             response.json().then(function (filme) {
-                var Filme = document.getElementById("post");
+                var Filme = document.getElementById("filme");
                 Filme.innerHTML = '';
                 var detalhesFilme = desenhaDetalhesFilme(filme, usuarioAutoriza);
                 Filme.appendChild(detalhesFilme);

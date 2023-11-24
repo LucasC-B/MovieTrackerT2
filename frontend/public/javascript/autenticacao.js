@@ -9,10 +9,11 @@ let usuarioAutorizaPromise = new Promise((resolve, reject) => {
                 'Authorization': tokenKeyword + token
             }
         })
-        .then(response => response.json())
-        .then(data => {
-            usuarioAutoriza = data.username;
-            resolve(usuarioAutoriza);
+        .then(function (response){
+            response.json().then(function(data) {
+                usuarioAutoriza = data.username;
+                resolve({usuarioAutoriza, response});
+            });
         })
         .catch(erro => {
             console.log('[setLoggedUser] ocorreu o erro: ' + erro);

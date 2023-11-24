@@ -36,11 +36,11 @@
                                     </div>
                                     <div class="mb-3">
                                         <label for="id_ano" class="form-label">Ano</label>
-                                        <input type="number" name="ano" class="form-control text-bg-dark" id="ano" placeholder="Ano" required>
+                                        <input type="number" name="ano" class="form-control text-bg-dark" id="ano" placeholder="Ano" min='1900' max='2099' required>
                                     </div>
                                     <div class="mb-3">
                                         <label for="id_sinopse" class="form-label">Sinopse</label>
-                                        <input type="text" name="sinopse" class="form-control text-bg-dark" id="sinopse" placeholder="Sinopse">
+                                        <textarea name="sinopse" rows="10" class="form-control text-bg-dark" id="sinopse" placeholder="Sinopse"></textarea>
                                     </div>
                                     <div class="mb-3">
                                         <label for="id_diretor" class="form-label">Diretor</label>
@@ -48,11 +48,11 @@
                                     </div>
                                     <div class="mb-3">
                                         <label for="id_nota" class="form-label">Nota</label>
-                                        <input type="number" name="nota" class="form-control text-bg-dark" id="nota" placeholder="Nota" required>
+                                        <input type="number" name="nota" class="form-control text-bg-dark" id="nota" placeholder="Nota" min='0' max='10' required>
                                     </div>
                                     <div class="mb-3">
                                         <label for="id_review" class="form-label">Review</label>
-                                        <input type="text" name="review" class="form-control text-bg-dark" id="review" placeholder="Review" required>
+                                        <textarea name="review" rows="10" class="form-control text-bg-dark" id="review" placeholder="Review" required></textarea>
                                     </div>
                                     <div class="mb-3">
                                         <label for="id_visto" class="form-label">Visto</label>
@@ -68,9 +68,9 @@
                 </div>
             </div>
         </main>
-        <footer>
+        <!-- <footer>
             <iframe src="partes/footer.html" frameborder="0" style="width: 100%; height: auto;"></iframe>
-        </footer>
+        </footer> -->
           <!-- Bootstrap JavaScript Libraries -->
         <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"
             integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous">

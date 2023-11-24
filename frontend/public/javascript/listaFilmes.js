@@ -27,8 +27,13 @@ function criaListaFilmes(filme) {
 
     var headerFilme = document.createElement('p');
     headerFilme.className = 'card-text'
-    headerFilme.textContent = "Filme: " + filme.titulo + "      Lançado: " + filme.ano;
+    headerFilme.textContent = "Filme: " + filme.titulo
     cardDetail.appendChild(headerFilme);
+
+    var anoFilme = document.createElement('p');
+    anoFilme.className = 'card-text'
+    anoFilme.textContent = "Ano: " + filme.ano;
+    cardDetail.appendChild(anoFilme);
 
     var hr = document.createElement('hr')
     cardDetail.appendChild(hr)
@@ -40,7 +45,7 @@ function criaListaFilmes(filme) {
 
     var notaFilme = document.createElement('h3');
     notaFilme.className = 'card-text';
-    noteFilme.textContent = filme.nota;
+    notaFilme.textContent = 'Nota: ' + filme.nota;
     cardDetail.appendChild(notaFilme);
 
     var hr1 = document.createElement('hr')

@@ -1,3 +1,21 @@
-.footer{
-    min-height: 100px;
+/* Partes/Footer.css */
+
+/* Remova a propriedade text-align do footer */
+footer {
+    /* text-align: center; */
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    background-color: #f8f9fa; /* Cor de fundo opcional */
+    padding: 10px; /* Adapte o preenchimento conforme necessário */
+}
+
+/* Adicione estilos adicionais conforme necessário */
+.d-flex.flex-row.align-items-center.footer {
+    justify-content: center;
+}
+
+/* Adicione estilos adicionais para a barra horizontal (hr) */
+footer hr {
+    width: 50%; /* ou ajuste conforme necessário */
 }

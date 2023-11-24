@@ -1,23 +1,11 @@
-window.addEventListener('load', function () {
-    var token = localStorage.getItem('token');
-    fetch(backendAddress + 'usuarios/login', {
-        method: 'GET',
-        headers: {
-            'Authorization': tokenKeyword + token
-        }
-    })
-        .then(function (response) {
-            response.json().then(function (data) {
-                var usuario = data;
-                logadoOuVisitante(response, usuario);
-            });
-        })
-        .catch(function (erro) {
-            console.log('[setLoggedUser] ocorreu o erro: ' + erro);
-        });
+import { usuarioAutorizaPromise } from './autenticacao.js';
+
+usuarioAutorizaPromise.then(({ usuarioAutoriza, response }) => {
+    logadoOuVisitante(response,usuarioAutoriza);
 });
 
 function logadoOuVisitante(response,usuario) {
+    console.log(response)
     if (response.ok) {
         console.log('Usuário autenticado:', usuario.username);
 

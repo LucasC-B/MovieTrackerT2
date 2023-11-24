@@ -14,19 +14,20 @@
     <script src="javascript/constantes.js"></script>
 </head>
 
-<body style="margin: 0; padding: 0; display: flex; flex-direction: column;">
+<body>
     <header>
-        <iframe src="partes/header.html" frameborder="0" style="width: 100%; height: auto;" id="header"></iframe>
+        <iframe src="partes/header.html" frameborder="0" height="72px"></iframe>
     </header>
 
     <main>
         <div class="container">
             <div class="row">
+                
                 <div class="container-create-filme">
                     <div class="card create-filme-bar col-lg-4 offset-lg-8 flex-column text-bg-dark mt-5">
                         <div class="d-flex flex-column p-3 text-bg-dark">
-                            <img class="logo-img"
-                                src="frontend/public/images/Movie_Tracker_Logo.png" width="72" height="72">
+                            <img class="img-fluid d-block m-auto pb-2"
+                                src="/frontend/public/images/Movie_Tracker_Logo.png" width="72" height="72">
                                 <h3 class="text-center text-bg-dark">Poste o sobre um filme!</h3>
                                 <p class="m-auto"><a class="btn btn-warning" href="../public/criaFilme.html">Criar filme</a></p>
                                 <p>Opine sobre os seus filmes favoritos!</p>
@@ -38,7 +39,7 @@
                 <div class="filme-container mt-1">
                     <div class="container-filme">
                         <div class="row" id="filmeList">
-                        <!-- Lista de Filmes -->
+                         
                         </div>
                     </div>
                 </div>
@@ -46,9 +47,9 @@
         </div>
     </main>
     
-    <footer>
+    <!-- <footer>
         <iframe src="partes/footer.html" frameborder="0" style="width: 100%; height: auto;"></iframe>
-    </footer>
+    </footer> -->
 
     <!-- Bootstrap JavaScript Libraries -->
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"
