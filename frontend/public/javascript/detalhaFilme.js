@@ -2,7 +2,7 @@ import { usuarioAutorizaPromise } from "./autenticacao.js";
 
 document.addEventListener('DOMContentLoaded', function () {
     usuarioAutorizaPromise.then(usuarioAutoriza => {
-        exibeDetalhesFilme(usuarioAutoriza);
+        exibeDetalhesFilme(usuarioAutoriza.usuarioAutoriza);
     });
 });
 

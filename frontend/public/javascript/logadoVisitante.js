@@ -5,9 +5,9 @@ usuarioAutorizaPromise.then(({ usuarioAutoriza, response }) => {
 });
 
 function logadoOuVisitante(response,usuario) {
-    console.log(response)
+    
     if (response.ok) {
-        console.log('Usuário autenticado:', usuario.username);
+        console.log('Usuário autenticado:', usuario);
 
         var objDiv = document.getElementById('logado');
         objDiv.classList.remove('invisivel');  
@@ -18,7 +18,7 @@ function logadoOuVisitante(response,usuario) {
     } else {
         console.log('Usuário não autenticado. Usando nome de usuário padrão.');
 
-        usuario.username = ' Visitante';
+        usuario = ' Visitante';
         var objDiv = document.getElementById('deslogado');
         objDiv.classList.remove('invisivel');  
         objDiv.classList.add('visivel');  
@@ -28,5 +28,5 @@ function logadoOuVisitante(response,usuario) {
     }
 
     var spanElement = document.getElementById('id');
-    spanElement.innerHTML = usuario.username;
+    spanElement.innerHTML = usuario;
 }

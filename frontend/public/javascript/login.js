@@ -1,5 +1,21 @@
-onload = function () {
+import { usuarioAutorizaPromise } from './autenticacao.js';
 
+document.addEventListener('DOMContentLoaded', function () {
+    usuarioAutorizaPromise.then(usuarioAutoriza => {
+        usuario_autenticado(usuarioAutoriza.usuarioAutoriza);
+        
+    });
+});
+
+function usuario_autenticado(usuarioAutoriza){
+    if (usuarioAutoriza === 'visitante') {
+        login();
+    } else {
+        window.location.replace("index.html");
+    }
+}
+
+function login(){
     document.getElementById("btnLogin").addEventListener("click", function (evento) {
         evento.preventDefault();
         var username = document.getElementById("username").value;
@@ -34,5 +50,4 @@ onload = function () {
             msg.innerHTML = "Erro durante o login. Por favor, tente novamente!";
         });
     });
-
-};
+}

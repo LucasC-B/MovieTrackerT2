@@ -1,28 +1,43 @@
+import { usuarioAutorizaPromise } from './autenticacao.js';
+
 document.addEventListener('DOMContentLoaded', function () {
-    var urlParams = new URLSearchParams(window.location.search);
-    var slug = urlParams.get('slug');
-    
-    fetch(backendAddress + 'filmes/' + slug + '/', {
-        method: 'GET',
-    })
-        .then(function (response) {
-            response.json().then(function (filme) {
-                document.getElementById("titulo").value = filme.titulo;
-                document.getElementById("nacionalidade").value = filme.nacionalidade;
-                document.getElementById("ano").value = filme.ano;
-                document.getElementById("sinopse").value = filme.sinopse;
-                document.getElementById("diretor").value = filme.diretor;
-                document.getElementById("nota").value = filme.nota;
-                document.getElementById("review").value = filme.review;
-                document.getElementById("visto").value = filme.visto;
-            }).catch(function (error) {
-                console.error("Erro:", error);
-            });
+    usuarioAutorizaPromise
+        .then(({ usuarioAutoriza }) => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const slug = urlParams.get('slug');
+
+            if (slug && slug.split("-")[0] === usuarioAutoriza) {
+                atualizaFilme(slug);
+            } else {
+                window.location.replace("index.html");
+            }
+        })
+        .catch(error => {
+            console.error("Error durante autenticacao:", error);
         });
 });
 
-document.addEventListener("DOMContentLoaded", function () {
-    var btnSalvaFilme = document.getElementById("btnSalvaFilme");
+function atualizaFilme(slug) {
+    fetch(backendAddress + 'filmes/' + slug + '/', {
+        method: 'GET',
+    })
+    .then(response => response.json())
+    .then(filme => {
+        document.getElementById("titulo").value = filme.titulo;
+        document.getElementById("nacionalidade").value = filme.nacionalidade;
+        document.getElementById("ano").value = filme.ano;
+        document.getElementById("sinopse").value = filme.sinopse;
+        document.getElementById("diretor").value = filme.diretor;
+        document.getElementById("nota").value = filme.nota;
+        document.getElementById("review").value = filme.review;
+        document.getElementById("visto").value = filme.visto;
+    })
+    .catch(error => {
+         console.error("Error:", error);
+    });
+
+    const btnSalvaFilme = document.getElementById("btnSalvaFilme");
+
     if (btnSalvaFilme) {
         btnSalvaFilme.addEventListener("click", function (event) {
             event.preventDefault();
@@ -79,4 +94,4 @@ document.addEventListener("DOMContentLoaded", function () {
             });
         });
     }
-});
+}

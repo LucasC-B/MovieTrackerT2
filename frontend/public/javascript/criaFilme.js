@@ -1,4 +1,4 @@
-import { usuarioAutorizaPromise } from './autentificacao.js';
+import { usuarioAutorizaPromise } from './autenticacao.js';
 
 document.addEventListener('DOMContentLoaded', function () {
     usuarioAutorizaPromise
